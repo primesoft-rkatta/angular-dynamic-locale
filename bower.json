@@ -1,0 +1,9 @@
+{
+  "name": "angular-dynamic-locale",
+  "version": "0.0.1",
+  "author": "Carey Hinoki <carey.hinoki@gmail.com> (http://careyhinoki.me/)",
+  "devDependencies": {
+    "angular": "1.0.8",
+    "jquery":  "2.0.3"
+  }
+}
