@@ -103,6 +103,9 @@
     };
     this.loadLocales = function(callback) {
       var dlValue;
+      if (callback == null) {
+        callback = angular.noop;
+      }
       dlValue = angular.injector(['dynamic.locale']).get("dlValue");
       angular.forEach(locales, (function(_this) {
         return function(locale, key) {

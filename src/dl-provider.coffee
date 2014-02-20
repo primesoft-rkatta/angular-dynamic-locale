@@ -40,7 +40,7 @@ dl.provider "dlProvider", ->
   @setLocales = (locales) ->
     locales = locales
 
-  @loadLocales = (callback) ->
+  @loadLocales = (callback = angular.noop) ->
     dlValue = angular.injector(['dynamic.locale']).get "dlValue"
 
     angular.forEach locales, (locale, key) =>
