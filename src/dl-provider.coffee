@@ -23,6 +23,14 @@ dl.provider "dlProvider", ->
   getModuleName = (locale) ->
     return "dynamic.locale.#{locale}"
 
+  loadLocale = (locale) ->
+    # set ngLocale
+    eval locale
+
+    # create new module for locale
+    module = angular.module(getModuleName(locale), [])
+    module._invokeQueue.push ngLocaleModule._invokeQueue[0]
+
   @setCurrencyMap = (map) ->
     currencyMap = map
 
@@ -36,7 +44,7 @@ dl.provider "dlProvider", ->
     dlValue = angular.injector(['dynamic.locale']).get "dlValue"
 
     angular.forEach locales, (locale, key) =>
-      @loadLocale locale
+      @loadLocale dlValue[locale]
 
     # set default locale
     if dlValue[defaultLocale]?
@@ -46,24 +54,16 @@ dl.provider "dlProvider", ->
 
     callback.apply()
 
-  @loadLocale = (locale) ->
-    # set ngLocale
-    eval dlValue[locale]
-
-    # create new module for locale
-    module = angular.module(getModuleName(locale), [])
-    module._invokeQueue.push ngLocaleModule._invokeQueue[0]
-
   @$get = ->
-      currencyFilters: {}
-      dateFilters:     {}
+    currencyFilters: {}
+    dateFilters:     {}
 
-      loadCurrencyFilters: ->
-        angular.forEach locales, (locale, key) =>
-          @currencyFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("currency")
+    loadCurrencyFilters: ->
+      angular.forEach locales, (locale, key) =>
+        @currencyFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("currency")
 
-      loadDateFilters: ->
-        angular.forEach locales, (locale, key) =>
-          @dateFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("date")
+    loadDateFilters: ->
+      angular.forEach locales, (locale, key) =>
+        @dateFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("date")
 
   return @

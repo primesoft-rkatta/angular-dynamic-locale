@@ -76,7 +76,7 @@
    */
 
   dl.provider("dlProvider", function() {
-    var currencyMap, defaultLocale, getModuleName, locales, ngLocaleMap;
+    var currencyMap, defaultLocale, getModuleName, loadLocale, locales, ngLocaleMap;
     ngLocaleMap = {};
     defaultLocale = 'en-us';
     currencyMap = {
@@ -85,6 +85,12 @@
     locales = ['en-us'];
     getModuleName = function(locale) {
       return "dynamic.locale." + locale;
+    };
+    loadLocale = function(locale) {
+      var module;
+      eval(locale);
+      module = angular.module(getModuleName(locale), []);
+      return module._invokeQueue.push(ngLocaleModule._invokeQueue[0]);
     };
     this.setCurrencyMap = function(map) {
       return currencyMap = map;
@@ -100,7 +106,7 @@
       dlValue = angular.injector(['dynamic.locale']).get("dlValue");
       angular.forEach(locales, (function(_this) {
         return function(locale, key) {
-          return _this.loadLocale(locale);
+          return _this.loadLocale(dlValue[locale]);
         };
       })(this));
       if (dlValue[defaultLocale] != null) {
@@ -109,12 +115,6 @@
         throw Error("defaultLocale must be in locales");
       }
       return callback.apply();
-    };
-    this.loadLocale = function(locale) {
-      var module;
-      eval(dlValue[locale]);
-      module = angular.module(getModuleName(locale), []);
-      return module._invokeQueue.push(ngLocaleModule._invokeQueue[0]);
     };
     this.$get = function() {
       return {
