@@ -44,7 +44,7 @@ dl.provider "dlProvider", ->
     dlValue = angular.injector(['dynamic.locale']).get "dlValue"
 
     angular.forEach locales, (locale, key) =>
-      @loadLocale dlValue[locale]
+      loadLocale dlValue[locale]
 
     # set default locale
     if dlValue[defaultLocale]?

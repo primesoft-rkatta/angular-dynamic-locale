@@ -106,7 +106,7 @@
       dlValue = angular.injector(['dynamic.locale']).get("dlValue");
       angular.forEach(locales, (function(_this) {
         return function(locale, key) {
-          return _this.loadLocale(dlValue[locale]);
+          return loadLocale(dlValue[locale]);
         };
       })(this));
       if (dlValue[defaultLocale] != null) {
