@@ -13,8 +13,6 @@ dl.provider "dlProvider", [
   (
     dlConstant
   ) ->
-    ngLocaleMap = {}
-
     defaultLocale = 'en-us'
 
     currencyMap =
@@ -59,6 +57,12 @@ dl.provider "dlProvider", [
     @$get = ->
       currencyFilters: {}
       dateFilters:     {}
+
+      getCurrencyMap: ->
+        return currencyMap
+
+      getLocales: ->
+        return locales
 
       loadCurrencyFilters: ->
         angular.forEach locales, (locale, key) =>

@@ -1,3 +1,10 @@
+/**
+ * Angular-Dynamic-Locale v0.0.1
+ *
+ * @author: Carey Hinoki <carey.hinoki@gmail.com> (http://careyhinoki.me/)
+ * @date: 2014-02-20
+ */
+
 
 /*
 @chalk
@@ -7,9 +14,42 @@
  */
 
 (function() {
-  var dl;
+  var app, dl;
 
   dl = angular.module("dynamic.locale", ["ng"]);
+
+  app = angular.module("app", ['dynamic.locale']);
+
+  app.config([
+    "dlProviderProvider", function(dlProviderProvider) {
+      dlProviderProvider.setLocales(['de', 'en-ca', 'en-gb', 'en-us']);
+      dlProviderProvider.setCurrencyMap({
+        'CAD': 'en-ca',
+        'EUR': 'de',
+        'GBP': 'en-gb',
+        'USD': 'en-us'
+      });
+      return dlProviderProvider.loadLocales();
+    }
+  ]);
+
+  app.controller("AngularDynamicLocaleController", [
+    "$scope", "dlProvider", function($scope, dlProvider) {
+      var currencyMap, x;
+      currencyMap = dlProvider.getCurrencyMap();
+      return $scope.values = (function() {
+        var _i, _results;
+        _results = [];
+        for (x = _i = 1; _i <= 10000; x = ++_i) {
+          _results.push({
+            currency_code: Object.keys(currencyMap)[Math.floor(Math.random() * 4)],
+            currency: parseFloat(Math.random() * (20 - 10) + 10).toFixed(2)
+          });
+        }
+        return _results;
+      })();
+    }
+  ]);
 
 
   /*
@@ -21,12 +61,12 @@
 
   dl.filter("dlCurrency", [
     "$filter", "dlProvider", function($filter, dlProvider) {
+      var currencyMap;
+      currencyMap = dlProvider.getCurrencyMap();
       dlProvider.loadCurrencyFilters();
-      return function(amount, locale, currencySymbol) {
-        var error, value;
-        if (locale == null) {
-          locale = "en-us";
-        }
+      return function(amount, format, currencySymbol) {
+        var error, locale, value;
+        locale = currencyMap[format] || format;
         try {
           value = dlProvider.currencyFilters[locale](amount, currencySymbol);
         } catch (_error) {
@@ -77,8 +117,7 @@
 
   dl.provider("dlProvider", [
     "dlConstant", function(dlConstant) {
-      var currencyMap, defaultLocale, getModuleName, loadLocale, locales, ngLocaleMap;
-      ngLocaleMap = {};
+      var currencyMap, defaultLocale, getModuleName, loadLocale, locales;
       defaultLocale = 'en-us';
       currencyMap = {
         "USD": "en-us"
@@ -122,6 +161,12 @@
         return {
           currencyFilters: {},
           dateFilters: {},
+          getCurrencyMap: function() {
+            return currencyMap;
+          },
+          getLocales: function() {
+            return locales;
+          },
           loadCurrencyFilters: function() {
             return angular.forEach(locales, (function(_this) {
               return function(locale, key) {

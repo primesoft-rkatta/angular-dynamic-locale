@@ -1,6 +1,14 @@
 module.exports = (grunt) ->
   grunt.config 'concat',
-    prod:
+    dev:
+      files: [
+        'tmp/vendor.js': [
+          'vendor/bower/jquery/jquery.js'
+          'vendor/bower/angular/angular.js'
+        ]
+      ]
+
+    i18n:
       files: [
         'tmp/i18n.coffee': 'i18n/**/*'
       ]
@@ -16,3 +24,11 @@ module.exports = (grunt) ->
           content = src.replace /["]/g, '\\"'
 
           return "\"#{locale}\":" + "\"\"\"\n" + content + "\"\"\"\n"
+
+    prod:
+      files: [
+        'dist/angular-dynamic-locale.js': 'dist/angular-dynamic-locale.js'
+      ]
+      options:
+        banner: '<%= banner %>'
+        stripBanners: false

@@ -3,7 +3,13 @@ module.exports = (grunt) ->
     coffee:
       files: 'src/**/*.coffee'
       tasks: [
-        'coffee:prod'
+        'coffee:dev'
+      ]
+
+    jade:
+      files: 'src/**/*.jade'
+      tasks: [
+        'jade:dev'
       ]
 
     grunt:

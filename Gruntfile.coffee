@@ -12,7 +12,6 @@ module.exports = (grunt) ->
      * <%= _.titleize(pkg.name) %> v<%= pkg.version %>
      *
      * @author: <%= pkg.author %>
-     * @contributors: <%= pkg.contributors.join(', ') %>
      * @date: <%= grunt.template.today("yyyy-mm-dd") %>
      */\n\n
     """
@@ -20,9 +19,28 @@ module.exports = (grunt) ->
   grunt.loadTasks 'grunt'
 
   grunt.registerTask 'default', 'Running development environment...', [
-    'clean:prod'
+    'build'
+    'connect'
+    'watch'
+  ]
+
+  grunt.registerTask 'build', 'Running development tasks...', [
+    'clean:dev'
+    'concat:i18n'
+    'coffee:dev'
+    'jade:dev'
+    'concat:dev'
     'chalkboard:src'
-    'concat:prod'
+  ]
+
+  grunt.registerTask 'deploy', 'Running deployment task...', [
+    'clean:prod'
     'coffee:prod'
+    'concat:prod'
     'uglify:prod'
+  ]
+
+  grunt.registerTask 'pages', 'Running pages tasks...', [
+    'build'
+    'gh-pages'
   ]
