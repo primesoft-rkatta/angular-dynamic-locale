@@ -31,14 +31,14 @@ dl.provider "dlProvider", ->
     module = angular.module(getModuleName(locale), [])
     module._invokeQueue.push angular.module(['ngLocale'])._invokeQueue[0]
 
-  @setCurrencyMap = (map) ->
-    currencyMap = map
+  @setCurrencyMap = (supportedCurrencyMap) ->
+    currencyMap = supportedCurrencyMap
 
   @setDefaultLocale = (locale) ->
     defaultLocale = locale
 
-  @setLocales = (locales) ->
-    locales = locales
+  @setLocales = (supportedLocales) ->
+    locales = supportedLocales
 
   @loadLocales = (callback = angular.noop) ->
     dlValue = angular.injector(['dynamic.locale']).get "dlValue"

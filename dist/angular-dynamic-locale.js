@@ -92,14 +92,14 @@
       module = angular.module(getModuleName(locale), []);
       return module._invokeQueue.push(angular.module(['ngLocale'])._invokeQueue[0]);
     };
-    this.setCurrencyMap = function(map) {
-      return currencyMap = map;
+    this.setCurrencyMap = function(supportedCurrencyMap) {
+      return currencyMap = supportedCurrencyMap;
     };
     this.setDefaultLocale = function(locale) {
       return defaultLocale = locale;
     };
-    this.setLocales = function(locales) {
-      return locales = locales;
+    this.setLocales = function(supportedLocales) {
+      return locales = supportedLocales;
     };
     this.loadLocales = function(callback) {
       var dlValue;
