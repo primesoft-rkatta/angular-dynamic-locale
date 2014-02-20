@@ -8,62 +8,65 @@
 
 ###
 
-dl.provider "dlProvider", ->
-  ngLocaleMap = {}
+dl.provider "dlProvider", [
+  "dlConstant"
+  (
+    dlConstant
+  ) ->
+    ngLocaleMap = {}
 
-  defaultLocale = 'en-us'
+    defaultLocale = 'en-us'
 
-  currencyMap =
-    "USD": "en-us"
+    currencyMap =
+      "USD": "en-us"
 
-  locales = [
-    'en-us'
-  ]
+    locales = [
+      'en-us'
+    ]
 
-  getModuleName = (locale) ->
-    return "dynamic.locale.#{locale}"
+    getModuleName = (locale) ->
+      return "dynamic.locale.#{locale}"
 
-  loadLocale = (locale, ngLocale) ->
-    # set ngLocale
-    eval ngLocale
+    loadLocale = (locale, ngLocale) ->
+      # set ngLocale
+      eval ngLocale
 
-    # create new module for locale
-    module = angular.module(getModuleName(locale), [])
-    module._invokeQueue.push angular.module(['ngLocale'])._invokeQueue[0]
+      # create new module for locale
+      module = angular.module(getModuleName(locale), [])
+      module._invokeQueue.push angular.module(['ngLocale'])._invokeQueue[0]
 
-  @setCurrencyMap = (supportedCurrencyMap) ->
-    currencyMap = supportedCurrencyMap
+    @setCurrencyMap = (supportedCurrencyMap) ->
+      currencyMap = supportedCurrencyMap
 
-  @setDefaultLocale = (locale) ->
-    defaultLocale = locale
+    @setDefaultLocale = (locale) ->
+      defaultLocale = locale
 
-  @setLocales = (supportedLocales) ->
-    locales = supportedLocales
+    @setLocales = (supportedLocales) ->
+      locales = supportedLocales
 
-  @loadLocales = (callback = angular.noop) ->
-    dlValue = angular.injector(['dynamic.locale']).get "dlValue"
-
-    angular.forEach locales, (locale, key) =>
-      loadLocale locale, dlValue[locale]
-
-    # set default locale
-    if dlValue[defaultLocale]?
-      eval dlValue[defaultLocale]
-    else
-      throw Error "defaultLocale must be in locales"
-
-    callback.apply()
-
-  @$get = ->
-    currencyFilters: {}
-    dateFilters:     {}
-
-    loadCurrencyFilters: ->
+    @loadLocales = (callback = angular.noop) ->
       angular.forEach locales, (locale, key) =>
-        @currencyFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("currency")
+        loadLocale locale, dlConstant[locale]
 
-    loadDateFilters: ->
-      angular.forEach locales, (locale, key) =>
-        @dateFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("date")
+      # set default locale
+      if dlConstant[defaultLocale]?
+        eval dlConstant[defaultLocale]
+      else
+        throw Error "defaultLocale must be in locales"
 
-  return @
+      callback.apply()
+
+    @$get = ->
+      currencyFilters: {}
+      dateFilters:     {}
+
+      loadCurrencyFilters: ->
+        angular.forEach locales, (locale, key) =>
+          @currencyFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("currency")
+
+      loadDateFilters: ->
+        angular.forEach locales, (locale, key) =>
+          @dateFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("date")
+
+    return @
+]

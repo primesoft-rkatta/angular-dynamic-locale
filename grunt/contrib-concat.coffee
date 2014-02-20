@@ -5,7 +5,7 @@ module.exports = (grunt) ->
         'tmp/i18n.coffee': 'i18n/**/*'
       ]
       options:
-        banner: "dl.value \"dlValue\",\n"
+        banner: "dl.constant \"dlConstant\",\n"
         process: (src, filePath) ->
           matches = filePath.match /angular-locale_(.*?).js/
 
