@@ -29,7 +29,7 @@ dl.provider "dlProvider", ->
 
     # create new module for locale
     module = angular.module(getModuleName(locale), [])
-    module._invokeQueue.push ngLocaleModule._invokeQueue[0]
+    module._invokeQueue.push angular.injector(['ngLocale'])._invokeQueue[0]
 
   @setCurrencyMap = (map) ->
     currencyMap = map
