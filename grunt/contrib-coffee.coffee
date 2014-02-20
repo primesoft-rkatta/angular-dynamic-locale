@@ -5,6 +5,7 @@ module.exports = (grunt) ->
         'dist/angular-dynamic-locale.js': [
           'src/dl-module.coffee'
           'src/**/*.coffee'
+          'tmp/i18n.coffee'
         ]
       ]
       options:

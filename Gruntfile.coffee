@@ -22,6 +22,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', 'Running development environment...', [
     'clean:prod'
     'chalkboard:src'
+    'concat:prod'
     'coffee:prod'
     'uglify:prod'
   ]

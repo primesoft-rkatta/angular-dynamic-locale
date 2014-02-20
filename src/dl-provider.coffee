@@ -11,59 +11,54 @@
 dl.provider "dlProvider", ->
   ngLocaleMap = {}
 
-  locales = [
-    'en-us'
-  ]
+  defaultLocale = 'en-us'
 
   currencyMap =
     "USD": "en-us"
 
-  getFileName = (locale) ->
-    return "/i18n/angular-locale_#{locale}.js"
+  locales = [
+    'en-us'
+  ]
 
   getModuleName = (locale) ->
     return "dynamic.locale.#{locale}"
 
-  @setLocales = (locales) ->
-    locales = locales
-
   @setCurrencyMap = (map) ->
     currencyMap = map
 
+  @setDefaultLocale = (locale) ->
+    defaultLocale = locale
+
+  @setLocales = (locales) ->
+    locales = locales
+
   @$get = [
-    "$http"
     "$q"
+    "dlValue"
     (
-      $http
       $q
+      dlValue
     ) ->
       currencyFilters: {}
       dateFilters:     {}
 
       loadLocales: (callback) ->
-        promises = []
-
         angular.forEach locales, (locale, key) =>
-          promises.push @loadLocale locale
+          @loadLocale locale
 
-        $q.all(promises).then (values) =>
-          angular.forEach ngLocaleMap, (ngLocale, locale) =>
-            eval ngLocale
+        # set default locale
+        if dlValue[defaultLocale]?
+          eval dlValue[defaultLocale]
+        else
+          throw Error "defaultLocale must be in locales"
 
-            @addLocale locale, angular.module "ngLocale"
-
-          callback.apply()
+        callback.apply()
 
       loadLocale: (locale) ->
-        file = getFileName locale
+        # set ngLocale
+        eval dlValue[locale]
 
-        $http.get(file)
-          .success (data, status) ->
-            ngLocaleMap[locale] = data
-          .error (data, status) ->
-            throw Error "#{status}: Failed to load #{file}."
-
-      addLocale: (locale, ngLocaleModule) ->
+        # create new module for locale
         module = angular.module(getModuleName(locale), [])
         module._invokeQueue.push ngLocaleModule._invokeQueue[0]
 
