@@ -90,7 +90,7 @@
       var module;
       eval(locale);
       module = angular.module(getModuleName(locale), []);
-      return module._invokeQueue.push(angular.injector(['ngLocale'])._invokeQueue[0]);
+      return module._invokeQueue.push(angular.module(['ngLocale'])._invokeQueue[0]);
     };
     this.setCurrencyMap = function(map) {
       return currencyMap = map;
