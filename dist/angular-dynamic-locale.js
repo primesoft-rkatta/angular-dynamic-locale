@@ -76,16 +76,13 @@
    */
 
   dl.provider("dlProvider", function() {
-    var currencyMap, defaultLocale, getFileName, getModuleName, locales, ngLocaleMap;
+    var currencyMap, defaultLocale, getModuleName, locales, ngLocaleMap;
     ngLocaleMap = {};
     defaultLocale = 'en-us';
     currencyMap = {
       "USD": "en-us"
     };
     locales = ['en-us'];
-    getFileName = function(locale) {
-      return "/i18n/angular-locale_" + locale + ".js";
-    };
     getModuleName = function(locale) {
       return "dynamic.locale." + locale;
     };
@@ -98,28 +95,30 @@
     this.setLocales = function(locales) {
       return locales = locales;
     };
+    this.loadLocales = function(callback) {
+      angular.forEach(locales, (function(_this) {
+        return function(locale, key) {
+          return _this.loadLocale(locale);
+        };
+      })(this));
+      if (dlValue[defaultLocale] != null) {
+        eval(dlValue[defaultLocale]);
+      } else {
+        throw Error("defaultLocale must be in locales");
+      }
+      return callback.apply();
+    };
+    this.loadLocale = function(locale) {
+      var module;
+      eval(dlValue[locale]);
+      module = angular.module(getModuleName(locale), []);
+      return module._invokeQueue.push(ngLocaleModule._invokeQueue[0]);
+    };
     this.$get = [
-      "$http", "$q", "dlValue", function($http, $q, dlValue) {
+      "$q", "dlValue", function($q, dlValue) {
         return {
           currencyFilters: {},
           dateFilters: {},
-          loadLocales: function(callback) {
-            angular.forEach(locales, (function(_this) {
-              return function(locale, key) {
-                return _this.loadLocale(locale);
-              };
-            })(this));
-            if (dlValue[defaultLocale] != null) {
-              eval(dlValue[defaultLocale]);
-            }
-            return callback.apply();
-          },
-          loadLocale: function(locale) {
-            var module;
-            eval(dlValue[locale]);
-            module = angular.module(getModuleName(locale), []);
-            return module._invokeQueue.push(ngLocaleModule._invokeQueue[0]);
-          },
           loadCurrencyFilters: function() {
             return angular.forEach(locales, (function(_this) {
               return function(locale, key) {

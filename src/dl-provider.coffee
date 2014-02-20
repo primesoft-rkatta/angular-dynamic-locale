@@ -32,6 +32,26 @@ dl.provider "dlProvider", ->
   @setLocales = (locales) ->
     locales = locales
 
+  @loadLocales = (callback) ->
+    angular.forEach locales, (locale, key) =>
+      @loadLocale locale
+
+    # set default locale
+    if dlValue[defaultLocale]?
+      eval dlValue[defaultLocale]
+    else
+      throw Error "defaultLocale must be in locales"
+
+    callback.apply()
+
+  @loadLocale = (locale) ->
+    # set ngLocale
+    eval dlValue[locale]
+
+    # create new module for locale
+    module = angular.module(getModuleName(locale), [])
+    module._invokeQueue.push ngLocaleModule._invokeQueue[0]
+
   @$get = [
     "$q"
     "dlValue"
@@ -41,26 +61,6 @@ dl.provider "dlProvider", ->
     ) ->
       currencyFilters: {}
       dateFilters:     {}
-
-      loadLocales: (callback) ->
-        angular.forEach locales, (locale, key) =>
-          @loadLocale locale
-
-        # set default locale
-        if dlValue[defaultLocale]?
-          eval dlValue[defaultLocale]
-        else
-          throw Error "defaultLocale must be in locales"
-
-        callback.apply()
-
-      loadLocale: (locale) ->
-        # set ngLocale
-        eval dlValue[locale]
-
-        # create new module for locale
-        module = angular.module(getModuleName(locale), [])
-        module._invokeQueue.push ngLocaleModule._invokeQueue[0]
 
       loadCurrencyFilters: ->
         angular.forEach locales, (locale, key) =>
