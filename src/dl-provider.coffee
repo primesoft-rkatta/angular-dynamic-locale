@@ -23,9 +23,9 @@ dl.provider "dlProvider", ->
   getModuleName = (locale) ->
     return "dynamic.locale.#{locale}"
 
-  loadLocale = (locale) ->
+  loadLocale = (locale, ngLocale) ->
     # set ngLocale
-    eval locale
+    eval ngLocale
 
     # create new module for locale
     module = angular.module(getModuleName(locale), [])
@@ -44,7 +44,7 @@ dl.provider "dlProvider", ->
     dlValue = angular.injector(['dynamic.locale']).get "dlValue"
 
     angular.forEach locales, (locale, key) =>
-      loadLocale dlValue[locale]
+      loadLocale locale, dlValue[locale]
 
     # set default locale
     if dlValue[defaultLocale]?

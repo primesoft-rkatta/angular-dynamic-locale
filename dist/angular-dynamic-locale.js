@@ -86,9 +86,9 @@
     getModuleName = function(locale) {
       return "dynamic.locale." + locale;
     };
-    loadLocale = function(locale) {
+    loadLocale = function(locale, ngLocale) {
       var module;
-      eval(locale);
+      eval(ngLocale);
       module = angular.module(getModuleName(locale), []);
       return module._invokeQueue.push(angular.module(['ngLocale'])._invokeQueue[0]);
     };
@@ -109,7 +109,7 @@
       dlValue = angular.injector(['dynamic.locale']).get("dlValue");
       angular.forEach(locales, (function(_this) {
         return function(locale, key) {
-          return loadLocale(dlValue[locale]);
+          return loadLocale(locale, dlValue[locale]);
         };
       })(this));
       if (dlValue[defaultLocale] != null) {
