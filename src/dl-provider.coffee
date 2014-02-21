@@ -8,15 +8,15 @@
 
 ###
 
-dl.provider "dlProvider", [
-  "dlConstant"
+dl.provider 'dlProvider', [
+  'dlConstant'
   (
     dlConstant
   ) ->
     defaultLocale = 'en-us'
 
     currencyMap =
-      "USD": "en-us"
+      'USD': 'en-us'
 
     locales = [
       'en-us'
@@ -50,7 +50,7 @@ dl.provider "dlProvider", [
       if dlConstant[defaultLocale]?
         eval dlConstant[defaultLocale]
       else
-        throw Error "defaultLocale must be in locales"
+        throw Error 'defaultLocale must be in locales'
 
       callback.apply()
 
@@ -66,11 +66,11 @@ dl.provider "dlProvider", [
 
       loadCurrencyFilters: ->
         angular.forEach locales, (locale, key) =>
-          @currencyFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("currency")
+          @currencyFilters[locale] = angular.injector(['ng', getModuleName(locale)]).get('$filter')('currency')
 
       loadDateFilters: ->
         angular.forEach locales, (locale, key) =>
-          @dateFilters[locale] = angular.injector(["ng", getModuleName(locale)]).get("$filter")("date")
+          @dateFilters[locale] = angular.injector(['ng', getModuleName(locale)]).get('$filter')('date')
 
     return @
 ]

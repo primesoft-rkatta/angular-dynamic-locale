@@ -12,6 +12,33 @@ body
     h1 Angular Dynamic Locale
 
   div(ng-controller="AngularDynamicLocaleController")
+    h2 International based approach
+
+    ul(
+      style="list-style: none; padding: 0;"
+    )
+      li(
+        style="display: inline-block; margin: 5px 10px; width: 120px"
+      )
+        | USD: {{12.38 | currency: dlCurrencySymbol['USD']}}
+
+      li(
+        style="display: inline-block; margin: 5px 10px; width: 120px"
+      )
+        | EUR: {{12.38 | currency: dlCurrencySymbol['EUR']}}
+
+      li(
+        style="display: inline-block; margin: 5px 10px; width: 120px"
+      )
+        | GBP: {{12.38 | currency: dlCurrencySymbol['GBP']}}
+
+      li(
+        style="display: inline-block; margin: 5px 10px; width: 120px"
+      )
+        | CAD: {{12.38 | currency: dlCurrencySymbol['CAD']}}
+
+    h2 Locale based approach
+
     ul(
       style="list-style: none; margin: 0; padding: 0;"
     )
@@ -20,6 +47,17 @@ body
         ng-repeat="value in values | limitTo: 1000"
       )
         {{value.currency | dlCurrency: value.currency_code}}
+
+    h2 Currency Symbols
+
+    ul(
+      style="list-style: none; padding: 0;"
+    )
+      li(
+        style="display: inline-block; margin: 5px 10px; width: 120px"
+        ng-repeat="(key, value) in dlCurrencySymbol"
+      )
+        | {{key}}: {{value}}
 
   script(src="vendor.js")
   script(src="angular-dynamic-locale.js")

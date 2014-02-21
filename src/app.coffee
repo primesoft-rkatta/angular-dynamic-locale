@@ -1,9 +1,9 @@
 # add dynamic.locale as a module depedency
-app = angular.module "app", ['dynamic.locale']
+app = angular.module 'app', ['dynamic.locale']
 
 # configure dlProviderProvider
 app.config [
-  "dlProviderProvider"
+  'dlProviderProvider'
   (
     dlProviderProvider
   ) ->
@@ -29,14 +29,18 @@ app.config [
     dlProviderProvider.loadLocales()
 ]
 
-app.controller "AngularDynamicLocaleController", [
-  "$scope"
-  "dlProvider"
+app.controller 'AngularDynamicLocaleController', [
+  '$scope'
+  'dlCurrencySymbol'
+  'dlProvider'
   (
     $scope
+    dlCurrencySymbol
     dlProvider
   ) ->
     currencyMap = dlProvider.getCurrencyMap()
+
+    $scope.dlCurrencySymbol = dlCurrencySymbol
 
     # generate dummy data
     $scope.values = ({

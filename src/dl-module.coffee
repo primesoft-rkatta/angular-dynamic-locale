@@ -6,4 +6,4 @@
 
 ###
 
-dl = angular.module "dynamic.locale", ["ng"]
+dl = angular.module 'dynamic.locale', ['ng']

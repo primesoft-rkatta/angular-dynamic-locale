@@ -6,9 +6,9 @@
 
 ###
 
-dl.filter "dlCurrency", [
-  "$filter"
-  "dlProvider"
+dl.filter 'dlCurrency', [
+  '$filter'
+  'dlProvider'
   (
     $filter
     dlProvider
@@ -24,7 +24,7 @@ dl.filter "dlCurrency", [
       try
         value = dlProvider.currencyFilters[locale] amount, currencySymbol
       catch error
-        value = $filter("currency") amount, currencySymbol
+        value = $filter('currency') amount, currencySymbol
 
       return value
 ]
