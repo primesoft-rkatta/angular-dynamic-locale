@@ -1,10 +1,10 @@
 (function() {
   var app;
 
-  app = angular.module("app", ['dynamic.locale']);
+  app = angular.module('app', ['dynamic.locale']);
 
   app.config([
-    "dlProviderProvider", function(dlProviderProvider) {
+    'dlProviderProvider', function(dlProviderProvider) {
       dlProviderProvider.setDefaultLocale('en-us');
       dlProviderProvider.setLocales(['de', 'en-ca', 'en-gb', 'en-us']);
       dlProviderProvider.setCurrencyMap({
@@ -17,10 +17,11 @@
     }
   ]);
 
-  app.controller("AngularDynamicLocaleController", [
-    "$scope", "dlProvider", function($scope, dlProvider) {
+  app.controller('AngularDynamicLocaleController', [
+    '$scope', 'dlCurrencySymbol', 'dlProvider', function($scope, dlCurrencySymbol, dlProvider) {
       var currencyMap, x;
       currencyMap = dlProvider.getCurrencyMap();
+      $scope.dlCurrencySymbol = dlCurrencySymbol;
       return $scope.values = (function() {
         var _i, _results;
         _results = [];
